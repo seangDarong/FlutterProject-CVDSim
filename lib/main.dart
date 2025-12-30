@@ -1,3 +1,6 @@
+import 'package:cvd_sim/models/capturedImage.dart';
+import 'package:cvd_sim/ui/screens/gallery/gallery_screen.dart';
+import 'package:cvd_sim/ui/screens/gallery/image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cvd_sim/ui/screens/landingScreen.dart';
@@ -16,6 +19,17 @@ final _router = GoRouter(
     GoRoute(
       path: '/simulator',
       builder: (context, state) => const SimulatorScreen(),
+    ),
+    GoRoute(
+      path: '/gallery',
+      builder: (context, state) => const GalleryScreen(),
+    ),
+    GoRoute(
+      path: '/images',
+      builder: (context, state) {
+        final image = state.extra as CapturedImage;
+        return ImageScreen(image: image);
+      },
     ),
   ],
 );
