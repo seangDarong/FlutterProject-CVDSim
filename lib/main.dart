@@ -1,55 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:cvd_sim/ui/screens/landingScreen.dart';
+import 'package:cvd_sim/ui/screens/simulatorScreen.dart';
+import 'package:cvd_sim/ui/screens/homeScreen.dart';
+
 
 void main() {
-  runApp(const FontTestApp());
+  runApp(const MyApp());
 }
 
-class FontTestApp extends StatelessWidget {
-  const FontTestApp({super.key});
+final _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(path: '/', builder: (context, state) => const LandingScreen()),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/simulator',
+      builder: (context, state) => const SimulatorScreen(),
+    ),
+  ],
+);
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Font Test Run'),
-          backgroundColor: Colors.blueGrey,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 1. Default System Font
-              const Text(
-                'This is the default font',
-                style: TextStyle(fontSize: 18),
-              ),
-              
-              const SizedBox(height: 30),
-
-              // 2. Your Custom DM Sans Font
-              const Text(
-                'This is DM Sans Regular',
-                style: TextStyle(
-                  fontFamily: 'DMSans', // Make sure this matches your pubspec.yaml
-                  fontSize: 28,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              const Text(
-                'Testing numbers: 1234567890',
-                style: TextStyle(
-                  fontFamily: 'DMSans',
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
+      routerConfig: _router,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: 'DMSans',
       ),
     );
   }
