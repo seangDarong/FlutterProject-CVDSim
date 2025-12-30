@@ -1,0 +1,4 @@
+enum SimulationMode {
+  single,
+  dual,
+}
