@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cvd_sim/widget/button.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -27,20 +28,20 @@ class LandingScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 0),
                       // Large icon
                       Icon(
-                          Icons.remove_red_eye,
-                          size: 200,
-                          color: primaryColor,
+                        Icons.remove_red_eye,
+                        size: 200,
+                        color: primaryColor,
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 0),
                       // Big welcome text
                       Text(
-                        'Welcome to',
+                        'Welcome to ',
                         style: TextStyle(
                           fontFamily: 'DMSans',
-                          fontSize: 50,
+                          fontSize: 45,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -49,7 +50,7 @@ class LandingScreen extends StatelessWidget {
                         'CVDSim',
                         style: TextStyle(
                           fontFamily: 'DMSans',
-                          fontSize: 50,
+                          fontSize: 45,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -61,29 +62,13 @@ class LandingScreen extends StatelessWidget {
                   Positioned(
                     right: 0,
                     bottom: 0,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.go('/home');
+                    child: Builder(
+                      builder: (context) {
+                        return AppButton(
+                          label: 'Start',
+                          onPressed: () => context.go('/home'),
+                        );
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 12.0,
-                        ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Start',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
                     ),
                   ),
                 ],

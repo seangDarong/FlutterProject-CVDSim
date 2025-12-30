@@ -4,7 +4,6 @@ import 'package:cvd_sim/ui/screens/landingScreen.dart';
 import 'package:cvd_sim/ui/screens/simulatorScreen.dart';
 import 'package:cvd_sim/ui/screens/homeScreen.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -13,10 +12,7 @@ final _router = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(path: '/', builder: (context, state) => const LandingScreen()),
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => const HomeScreen(),
-    ),
+    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: '/simulator',
       builder: (context, state) => const SimulatorScreen(),
