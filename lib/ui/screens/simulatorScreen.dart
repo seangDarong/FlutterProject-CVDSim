@@ -1,5 +1,7 @@
+import 'package:cvd_sim/widget/button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '';
 
 class SimulatorScreen extends StatelessWidget {
   const SimulatorScreen({super.key});
@@ -14,7 +16,15 @@ class SimulatorScreen extends StatelessWidget {
         ),
         title: const Text('Home'),
       ),
-      body: const Center(child: Text('Simulator screen placeholder')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Simulator screen placeholder'),
+            AppButton(label: "Go to gallery", onPressed: () => context.go('/gallery')),
+          ],
+        ),
+      ),
     );
   }
 }
