@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:cvd_sim/models/capturedImage.dart';
 import 'package:cvd_sim/ui/screens/gallery/gallery_screen.dart';
 import 'package:cvd_sim/ui/screens/gallery/image_screen.dart';
@@ -7,9 +8,21 @@ import 'package:cvd_sim/ui/screens/landingScreen.dart';
 import 'package:cvd_sim/ui/screens/simulatorScreen.dart';
 import 'package:cvd_sim/ui/screens/homeScreen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    final available = await availableCameras();
+    cameras.addAll(available); // populate the global cameras list
+  } catch (e) {
+    // ignore: avoid_print
+    print('Error fetching cameras: $e');
+  }
   runApp(const MyApp());
 }
+
+// void main() {
+//   runApp(const MyApp());
+// }
 
 final _router = GoRouter(
   initialLocation: '/',

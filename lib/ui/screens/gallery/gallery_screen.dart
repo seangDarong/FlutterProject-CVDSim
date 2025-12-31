@@ -10,7 +10,11 @@ class GalleryScreen extends StatelessWidget {
     final images = mockImages;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Gallery')),
+      appBar: AppBar(title: const Text('Gallery'),
+      leading: GestureDetector(
+          onTap: () => context.go('/simulator'),
+          child: Icon(Icons.arrow_back_ios)
+        ),),
       body: images.isEmpty
           ? const Center(child: Text('No images yet'))
           : GridView.builder(

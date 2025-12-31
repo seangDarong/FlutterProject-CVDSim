@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFF7F9FA),
       appBar: AppBar(
-        
+        backgroundColor: Colors.white,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Row(
