@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 
 class CameraPreviewWidget extends StatefulWidget {
   final CameraDescription camera;
-  const CameraPreviewWidget({super.key, required this.camera});
+  final double widthFactor; // 0.0 to 1.0, percentage of screen width
+  final double aspectRatio;
+  final BorderRadius? borderRadius;
+
+  const CameraPreviewWidget({
+    super.key,
+    required this.camera,
+    this.widthFactor = 0.85,
+    this.aspectRatio = 3 / 4,
+    this.borderRadius,
+  });
 
   @override
   State<CameraPreviewWidget> createState() => _CameraPreviewWidgetState();
@@ -34,7 +44,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final previewWidth = screenWidth * 0.85; // 85% of screen width
+    final previewWidth = screenWidth * widget.widthFactor;
+    
 
     return FutureBuilder(
       future: _initializeControllerFuture,
@@ -43,19 +54,27 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
           return SizedBox(
             width: previewWidth,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(12),
               child: AspectRatio(
-                aspectRatio: 3 / 4, // portrait ratio matching design
-                child: CameraPreview(_cameraController),
+                aspectRatio: widget.aspectRatio,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  clipBehavior: Clip.hardEdge,
+                  child: SizedBox(
+                    width: _cameraController.value.previewSize?.height ?? 1,
+                    height: _cameraController.value.previewSize?.width ?? 1,
+                    child: CameraPreview(_cameraController),
+                  ),
+                ),
               ),
             ),
           );
         } else {
           return SizedBox(
             width: previewWidth,
-            child: const AspectRatio(
-              aspectRatio: 3 / 4,
-              child: Center(child: CircularProgressIndicator()),
+            child: AspectRatio(
+              aspectRatio: widget.aspectRatio,
+              child: const Center(child: CircularProgressIndicator()),
             ),
           );
         }

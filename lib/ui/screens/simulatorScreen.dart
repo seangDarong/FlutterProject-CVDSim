@@ -1,12 +1,11 @@
 import 'package:cvd_sim/widget/button.dart';
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-import '../widget/simulator/camera_preview_widget.dart';
+import '../widget/simulator/SimulationCameraSection.dart';
 import '../../models/simulationMode.dart';
 import '../widget/simulator/simulationAppBar.dart';
 import 'package:go_router/go_router.dart';
 
-final List<CameraDescription> cameras = [];
+
 
 class SimulatorScreen extends StatefulWidget {
   const SimulatorScreen({super.key});
@@ -36,12 +35,10 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
                 onModeChanged: _onModeChanged,
               ),
               const SizedBox(height: 20),
-
-              if (cameras.isNotEmpty)
-                CameraPreviewWidget(camera: cameras[0])
-              else
-                const Text('No camera available'),
-
+              Container(
+                height: 500,
+                child: SimulationCameraSection(mode: _mode)
+              ),
               const Spacer(),
               AppButton(
                 label: "Go to gallery",
