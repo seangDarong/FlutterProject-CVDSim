@@ -1,26 +1,44 @@
 import 'package:flutter/material.dart';
 import '../../../models/capturedImage.dart';
-import '../../../models/simulationMode.dart';
 import '../../../models/cvdType.dart';
+import '../../../utils/cvd_filters.dart';
 
 class ImageScreen extends StatefulWidget {
-  final CapturedImage image;
+  final List<CapturedImage> images;
+  final int initialIndex;
 
-  const ImageScreen({super.key, required this.image});
+  const ImageScreen({
+    super.key,
+    required this.images,
+    required this.initialIndex,
+  });
 
   @override
   State<ImageScreen> createState() => _ImageScreenState();
 }
 
 class _ImageScreenState extends State<ImageScreen> {
-  SimulationMode mode = SimulationMode.single;
+  late final PageController _pageController;
+  int currentIndex = 0;
 
-  late CVDType currentFilter;
+  /// null = normal vision
+  CVDType? currentFilter;
 
   @override
   void initState() {
     super.initState();
-    currentFilter = normalFilter;
+    currentIndex = widget.initialIndex;
+    currentFilter = null;
+
+    _pageController = PageController(
+      initialPage: widget.initialIndex,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -28,77 +46,93 @@ class _ImageScreenState extends State<ImageScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gallery'),
-        leading: const BackButton(),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
+      body: Padding( // ✅ uniform inset (same as gallery)
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
 
-          // Active filter label
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.grey.shade400),
-            ),
-            child: Text(
-              currentFilter.name,
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-          ),
+            // ───────────────────────────
+            // Swipeable image viewer
+            // ───────────────────────────
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.images.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentIndex = index;
+                    currentFilter = null;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final image = widget.images[index];
 
-          const SizedBox(height: 16),
-
-          // Image display
-          Expanded(
-            child: Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.matrix(currentFilter.matrix),
-                  child: Image.asset(
-                    widget.image.imagePath,
-                    fit: BoxFit.contain,
-                  ),
-                ),
+                  return Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: currentFilter == null
+                          ? Image.asset(
+                              image.imagePath,
+                              fit: BoxFit.contain,
+                            )
+                          : ColorFiltered(
+                              colorFilter: ColorFilter.matrix(
+                                currentFilter!.matrix,
+                              ),
+                              child: Image.asset(
+                                image.imagePath,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                    ),
+                  );
+                },
               ),
             ),
-          ),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Filter buttons
-          _buildFilterButtons(),
+            // ───────────────────────────
+            // Filter buttons
+            // ───────────────────────────
+            _buildFilterButtons(),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-          // Bottom actions (placeholders)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
+            // ───────────────────────────
+            // Bottom actions
+            // ───────────────────────────
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _actionButton('Save to Device'),
-                _actionButton('Delete'),
+                _actionButton(
+                  label: 'Save to Device',
+                  onPressed: _savePlaceholder,
+                ),
+                _actionButton(
+                  label: 'Delete',
+                  onPressed: _showDeleteDialog,
+                ),
               ],
             ),
-          ),
 
-          const SizedBox(height: 24),
-        ],
+            const SizedBox(height: 10),
+          ],
+        ),
       ),
     );
   }
 
-  // ─────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────
   // UI helpers
-  // ─────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────
 
   Widget _buildFilterButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _filterButton(normalFilter),
         _filterButton(protanopiaFilter),
         _filterButton(deuteranopiaFilter),
         _filterButton(tritanopiaFilter),
@@ -107,12 +141,12 @@ class _ImageScreenState extends State<ImageScreen> {
   }
 
   Widget _filterButton(CVDType filter) {
-    final bool isActive = currentFilter.id == filter.id;
+    final bool isActive = currentFilter?.id == filter.id;
 
     return ElevatedButton(
       onPressed: () {
         setState(() {
-          currentFilter = filter;
+          currentFilter = isActive ? null : filter;
         });
       },
       style: ElevatedButton.styleFrom(
@@ -125,9 +159,12 @@ class _ImageScreenState extends State<ImageScreen> {
     );
   }
 
-  Widget _actionButton(String label) {
+  Widget _actionButton({
+    required String label,
+    required VoidCallback onPressed,
+  }) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.green,
         shape: RoundedRectangleBorder(
@@ -137,59 +174,71 @@ class _ImageScreenState extends State<ImageScreen> {
       child: Text(label),
     );
   }
+
+  // ─────────────────────────────────────────────
+  // Placeholders
+  // ─────────────────────────────────────────────
+
+  void _savePlaceholder() {
+    // TODO:
+    // Web (Chrome): trigger browser download
+    // Mobile: save to gallery
+  }
+
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete image?'),
+          content: const Text(
+            'This action cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // TODO:
+                // - Remove image from list
+                // - Navigate back if list empty
+              },
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
-//
-// ─────────────────────────────────────────────────────────────
-// Temporary filter definitions (single mode only)
-// These can be moved to a shared file later
-// ─────────────────────────────────────────────────────────────
-//
-
-final normalFilter = CVDType(
-  id: 'normal',
-  name: 'Normal',
-  description: 'Normal vision',
-  matrix: const [
-    1, 0, 0, 0, 0,
-    0, 1, 0, 0, 0,
-    0, 0, 1, 0, 0,
-    0, 0, 0, 1, 0,
-  ],
-);
+// ─────────────────────────────────────────────
+// Filters
+// ─────────────────────────────────────────────
 
 final protanopiaFilter = CVDType(
   id: 'protanopia',
   name: 'Protanopia',
   description: '',
-  matrix: const [
-    0.567, 0.433, 0, 0, 0,
-    0.558, 0.442, 0, 0, 0,
-    0, 0.242, 0.758, 0, 0,
-    0, 0, 0, 1, 0,
-  ],
+  matrix: CVDFilters.protanopia,
 );
 
 final deuteranopiaFilter = CVDType(
   id: 'deuteranopia',
   name: 'Deuteranopia',
   description: '',
-  matrix: const [
-    0.625, 0.375, 0, 0, 0,
-    0.7, 0.3, 0, 0, 0,
-    0, 0.3, 0.7, 0, 0,
-    0, 0, 0, 1, 0,
-  ],
+  matrix: CVDFilters.deuteranopia,
 );
 
 final tritanopiaFilter = CVDType(
   id: 'tritanopia',
   name: 'Tritanopia',
   description: '',
-  matrix: const [
-    0.95, 0.05, 0, 0, 0,
-    0, 0.433, 0.567, 0, 0,
-    0, 0.475, 0.525, 0, 0,
-    0, 0, 0, 1, 0,
-  ],
+  matrix: CVDFilters.tritanopia,
 );

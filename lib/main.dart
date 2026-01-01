@@ -37,14 +37,7 @@ final _router = GoRouter(
     GoRoute(
       path: '/gallery',
       builder: (context, state) => const GalleryScreen(),
-    ),
-    GoRoute(
-      path: '/images',
-      builder: (context, state) {
-        final image = state.extra as CapturedImage;
-        return ImageScreen(image: image);
-      },
-    ),
+    )
   ],
 );
 

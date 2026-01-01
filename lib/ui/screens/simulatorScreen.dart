@@ -42,7 +42,7 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
               const Spacer(),
               AppButton(
                 label: "Go to gallery",
-                onPressed: () => context.go('/gallery'),
+                onPressed: () => context.push('/gallery'),
               ),
             ],
           ),
