@@ -18,7 +18,7 @@ class SimulationAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => context.go('/home'),
+          onTap: () => context.pop('/home'),
           child: Icon(Icons.arrow_back_ios)
         ),
         

@@ -12,7 +12,7 @@ class GalleryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Gallery'),
       leading: GestureDetector(
-          onTap: () => context.go('/simulator'),
+          onTap: () => context.pop('/simulator'),
           child: Icon(Icons.arrow_back_ios)
         ),),
       body: images.isEmpty

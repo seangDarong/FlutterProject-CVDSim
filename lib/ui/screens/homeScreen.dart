@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: InkWell(
-                      onTap: () => context.go('/simulator'),
+                      onTap: () => context.push('/simulator'),
                       child: Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: Column(

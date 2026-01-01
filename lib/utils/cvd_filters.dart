@@ -67,6 +67,13 @@
 
 
 class CVDFilters {
+  static const List<double> normal = [
+    1, 0, 0, 0, 0,
+    0, 1, 0, 0, 0,
+    0, 0, 1, 0, 0,
+    0, 0, 0, 1, 0,
+  ];
+
   static const List<double> protanopia = [
     0.567, 0.433, 0.000, 0, 0,
     0.558, 0.442, 0.000, 0, 0,

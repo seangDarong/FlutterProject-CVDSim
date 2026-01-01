@@ -1,10 +1,12 @@
 import 'package:camera/camera.dart';
+import 'package:cvd_sim/models/CVDType.dart';
 import 'package:flutter/material.dart';
 import '../../../models/simulationMode.dart';
-
 class SimulationCameraSection extends StatefulWidget {
   final SimulationMode mode;
-  const SimulationCameraSection({super.key, required this.mode});
+  final CVDType cvdType;
+  final CVDType bottomCvdType;
+  const SimulationCameraSection({super.key, required this.mode, required this.cvdType,required this.bottomCvdType});
 
   @override
   State<SimulationCameraSection> createState() =>
@@ -48,8 +50,10 @@ class _SimulationCameraSectionState extends State<SimulationCameraSection> {
 
   Widget _buildCameraPreview(
     double widthFactor,
-    double aspectRatio, [
+    double aspectRatio,
+    CVDType filterType, [
     BorderRadius? borderRadius,
+    
   ]) {
     final screenWidth = MediaQuery.of(context).size.width;
     final previewWidth = screenWidth * widthFactor;
@@ -66,7 +70,10 @@ class _SimulationCameraSectionState extends State<SimulationCameraSection> {
             child: SizedBox(
               width: _cameraController!.value.previewSize?.height ?? 1,
               height: _cameraController!.value.previewSize?.width ?? 1,
-              child: CameraPreview(_cameraController!),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.matrix(filterType.matrix), 
+                child: CameraPreview(_cameraController!),
+              ),
             ),
           ),
         ),
@@ -86,7 +93,7 @@ class _SimulationCameraSectionState extends State<SimulationCameraSection> {
 
     // Single mode - one large preview
     if (widget.mode == SimulationMode.single) {
-      return _buildCameraPreview(0.85, 3 / 4);
+      return _buildCameraPreview(0.85, 3 / 4, widget.cvdType);
     }
 
     // Compare mode - two previews using the SAME controller
@@ -96,9 +103,10 @@ class _SimulationCameraSectionState extends State<SimulationCameraSection> {
         _buildCameraPreview(
           0.85,
           3 / 2,
+          widget.cvdType,
           BorderRadius.vertical(bottom: Radius.circular(0),top: Radius.circular(12)),
         ),
-        _buildCameraPreview(0.85, 3 / 2,
+        _buildCameraPreview(0.85, 3 / 2, widget.bottomCvdType,
         BorderRadius.vertical(top: Radius.circular(0),bottom: Radius.circular(12))),
       ],
     );
