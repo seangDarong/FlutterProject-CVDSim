@@ -1,8 +1,14 @@
 import '../utils/cvd_filters.dart';
 import '../models/CVDType.dart';
 
-class CVDTypesData {
-  static final List<CVDType> all = [
+
+  final List<CVDType> cvdTypeData= [
+    CVDType(
+      id: 'normal',
+      name: 'normal',
+      description: 'normal',
+      matrix: CVDFilters.normal,
+    ),
     CVDType(
       id: 'protanopia',
       name: 'Protanopia',
@@ -21,21 +27,7 @@ class CVDTypesData {
       description: 'Blue-yellow color blindness.',
       matrix: CVDFilters.tritanopia,
     ),
-    CVDType(
-      id: 'achromatopsia',
-      name: 'Achromatopsia',
-      description: 'Complete color blindness (grayscale vision).',
-      matrix: CVDFilters.achromatopsia,
-    ),
-    CVDType(
-      id: 'achromatomaly',
-      name: 'Achromatomaly',
-      description: 'Partial color blindness with reduced saturation.',
-      matrix: CVDFilters.achromatomaly,
-    ),
+    
   ];
 
-  static CVDType getById(String id) {
-    return all.firstWhere((type) => type.id == id);
-  }
-}
+  
