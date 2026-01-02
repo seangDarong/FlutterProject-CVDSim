@@ -1,13 +1,11 @@
-import 'package:camera/camera.dart';
 import 'package:cvd_sim/data/cvd_types.dart';
 import 'package:cvd_sim/ui/widget/simulator/filter_button.dart';
-import 'package:cvd_sim/widget/button.dart';
 import 'package:flutter/material.dart';
 import '../widget/simulator/SimulationCameraSection.dart';
-import '../../models/simulationMode.dart';
+import '../../models/simulation_mode.dart';
 import '../widget/simulator/simulationAppBar.dart';
 import 'package:go_router/go_router.dart';
-import '../../models/CVDType.dart';
+import '../../models/cvd_type.dart';
 import '../widget/simulator/cameraControlBar.dart';
 import '../widget/simulator/filter_info_card.dart';
 
@@ -47,15 +45,13 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
     });
   }
 
-  void _onGallery (){
+  void _onGallery() {
     setState(() {
       context.push('/gallery');
     });
   }
 
-
-
-  void _onSwtichCamera () {
+  void _onSwtichCamera() {
     _cameraKey.currentState?.switchCamera();
   }
 
@@ -97,10 +93,7 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
                 onGallery: _onGallery,
               ),
               if (_mode == SimulationMode.single)
-              Expanded(
-                
-                child: FilterInfoCard(cvdType: _selectedType),
-              ),
+                Expanded(child: FilterInfoCard(cvdType: _selectedType)),
             ],
           ),
         ),

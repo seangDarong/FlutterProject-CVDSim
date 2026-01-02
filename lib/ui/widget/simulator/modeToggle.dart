@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../models/simulationMode.dart';
+import '../../../models/simulation_mode.dart';
 import 'modeButton.dart';
 
 class ModeToggle extends StatelessWidget {
