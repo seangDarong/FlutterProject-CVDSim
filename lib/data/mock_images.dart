@@ -1,4 +1,4 @@
-import '../models/capturedImage.dart';
+import '../models/captured_image.dart';
 
 final mockImages = [
   CapturedImage(

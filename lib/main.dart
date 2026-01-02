@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:cvd_sim/models/capturedImage.dart';
+import 'package:cvd_sim/models/captured_image.dart';
 import 'package:cvd_sim/ui/screens/gallery/gallery_screen.dart';
 import 'package:cvd_sim/ui/screens/gallery/image_screen.dart';
 import 'package:flutter/material.dart';

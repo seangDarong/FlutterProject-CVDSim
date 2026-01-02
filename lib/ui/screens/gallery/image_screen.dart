@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_compare_slider/image_compare_slider.dart';
-import '../../../models/capturedImage.dart';
+import '../../../models/captured_image.dart';
 import '../../../models/CVDType.dart';
 import '../../../utils/cvd_filters.dart';
 
