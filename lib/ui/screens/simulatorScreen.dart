@@ -54,8 +54,8 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
             children: [
               SimulationAppBar(mode: _mode, onModeChanged: _onModeChanged),
               const SizedBox(height: 20),
-              Container(
-                height: 500,
+              SizedBox(
+                height: 420,
                 child: SimulationCameraSection(
                   mode: _mode,
                   cvdType: _selectedType,
