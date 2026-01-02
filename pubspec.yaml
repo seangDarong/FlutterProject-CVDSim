@@ -20,6 +20,7 @@ dependencies:
   # Routing and UUID
   go_router: ^7.0.0
   uuid: ^4.3.3
+  image_compare_slider: ^2.8.0
 
 dev_dependencies:
   flutter_test:

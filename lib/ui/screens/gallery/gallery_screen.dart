@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import '../../../data/mock_images.dart';
+import 'image_screen.dart';
 
 class GalleryScreen extends StatelessWidget {
   const GalleryScreen({super.key});
@@ -23,13 +25,19 @@ class GalleryScreen extends StatelessWidget {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 10,
-                crossAxisSpacing: 10),
+                crossAxisSpacing: 10,
+              ),
               itemBuilder: (context, index) {
                 final image = images[index];
-
                 return GestureDetector(
                   onTap: () {
-                    context.push('/images', extra: image);
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) =>
+                            ImageScreen(images: images, initialIndex: index),
+                      ),
+                    );
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
