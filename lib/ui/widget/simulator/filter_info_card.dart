@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../models/CVDType.dart';
+import '../../../models/cvd_type.dart';
 
 class FilterInfoCard extends StatelessWidget {
   final CVDType cvdType;

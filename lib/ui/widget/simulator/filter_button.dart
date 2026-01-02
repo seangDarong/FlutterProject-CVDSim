@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../models/CVDType.dart';
-import '../../../models/simulationMode.dart';
+import '../../../models/cvd_type.dart';
+import '../../../models/simulation_mode.dart';
 
 class FilterButton extends StatelessWidget {
   final CVDType cvdType;
   final VoidCallback onTap;
   final bool isSelected;
-  
 
   const FilterButton({
     super.key,
     required this.cvdType,
     required this.onTap,
     required this.isSelected,
-    
   });
 
   @override
@@ -75,64 +73,62 @@ class FilterButtonRow extends StatelessWidget {
     required this.onTypeSelected,
     required this.selectedTypeBottom,
     required this.onTypeSelectedBottom,
-    required this.mode
-    });
+    required this.mode,
+  });
 
-    @override
+  @override
   Widget build(BuildContext context) {
-    
     if (mode == SimulationMode.single) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ...cvdType.map((type) {
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: FilterButton(
+                cvdType: type,
+                onTap: () => onTypeSelected(type),
+                isSelected: type == selectedType,
+              ),
+            );
+          }),
+        ],
+      );
+    }
+
+    return Column(
       children: [
-        ...cvdType.map((type) {
-          return Padding(
-            padding: const EdgeInsets.all(4),
-            child: FilterButton(
-              cvdType: type,
-              onTap:() => onTypeSelected(type),
-              isSelected: type == selectedType,
-            ),
-          );
-        })
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ...cvdType.map((type) {
+              return Padding(
+                padding: const EdgeInsets.all(4),
+                child: FilterButton(
+                  cvdType: type,
+                  onTap: () => onTypeSelected(type),
+                  isSelected: type == selectedType,
+                ),
+              );
+            }),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ...cvdType.map((type) {
+              return Padding(
+                padding: const EdgeInsets.all(4),
+                child: FilterButton(
+                  cvdType: type,
+                  onTap: () => onTypeSelectedBottom(type),
+                  isSelected: type == selectedTypeBottom,
+                ),
+              );
+            }),
+          ],
+        ),
       ],
     );
   }
-  
-
-  return Column(
-    children: [
-      Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ...cvdType.map((type) {
-          return Padding(
-            padding: const EdgeInsets.all(4),
-            child: FilterButton(
-              cvdType: type,
-              onTap:() => onTypeSelected(type),
-              isSelected: type == selectedType,
-            ),
-          );
-        })
-      ],
-    ),
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ...cvdType.map((type) {
-          return Padding(
-            padding: const EdgeInsets.all(4),
-            child: FilterButton(
-              cvdType: type,
-              onTap:() => onTypeSelectedBottom(type),
-              isSelected: type == selectedTypeBottom,
-            ),
-          );
-        })
-      ],
-    )
-    ],
-  );
-}
 }

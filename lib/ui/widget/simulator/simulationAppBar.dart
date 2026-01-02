@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../models/simulationMode.dart';
+import '../../../models/simulation_mode.dart';
 import 'modeToggle.dart';
 
 class SimulationAppBar extends StatelessWidget {
@@ -19,9 +19,9 @@ class SimulationAppBar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => context.pop('/home'),
-          child: Icon(Icons.arrow_back_ios)
+          child: Icon(Icons.arrow_back_ios),
         ),
-        
+
         const Text(
           'Simulation',
           style: TextStyle(
@@ -31,10 +31,8 @@ class SimulationAppBar extends StatelessWidget {
             color: Colors.black,
           ),
         ),
-        
 
-        ModeToggle(currentMode: mode, 
-        onModeChanged: onModeChanged),
+        ModeToggle(currentMode: mode, onModeChanged: onModeChanged),
       ],
     );
   }

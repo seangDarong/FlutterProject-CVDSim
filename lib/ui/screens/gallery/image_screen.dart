@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_compare_slider/image_compare_slider.dart';
 import '../../../models/captured_image.dart';
-import '../../../models/CVDType.dart';
+import '../../../models/cvd_type.dart';
 import '../../../utils/cvd_filters.dart';
 
 class ImageScreen extends StatefulWidget {
@@ -195,8 +195,7 @@ class _ImageScreenState extends State<ImageScreen> {
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Delete',
-                  style: TextStyle(color: Colors.red)),
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -219,7 +218,7 @@ final deuteranopiaFilter = CVDType(
   id: 'deuteranopia',
   name: 'Deuteranopia',
   description: '',
-    prevalence: '',
+  prevalence: '',
   affected: '',
   matrix: CVDFilters.deuteranopia,
 );
@@ -228,7 +227,7 @@ final tritanopiaFilter = CVDType(
   id: 'tritanopia',
   name: 'Tritanopia',
   description: '',
-    prevalence: '',
+  prevalence: '',
   affected: '',
   matrix: CVDFilters.tritanopia,
 );

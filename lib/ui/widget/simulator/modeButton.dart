@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../models/simulationMode.dart';
+import '../../../models/simulation_mode.dart';
 
 class ModeButton extends StatelessWidget {
   final String label;

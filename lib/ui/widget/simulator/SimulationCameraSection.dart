@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
-import 'package:cvd_sim/models/CVDType.dart';
+import 'package:cvd_sim/models/cvd_type.dart';
 import 'package:flutter/material.dart';
-import '../../../models/simulationMode.dart';
+import '../../../models/simulation_mode.dart';
 
 class SimulationCameraSection extends StatefulWidget {
   final SimulationMode mode;
@@ -93,8 +93,6 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
     _currentCameraIndex = (_currentCameraIndex + 1) % _cameras.length;
     await _setupCamera(_currentCameraIndex);
   }
-
-  
 
   @override
   void dispose() {

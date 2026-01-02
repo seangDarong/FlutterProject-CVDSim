@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../../data/mock_images.dart';
 import 'image_screen.dart';
 
@@ -12,9 +11,7 @@ class GalleryScreen extends StatelessWidget {
     final images = mockImages;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gallery'),
-        ),
+      appBar: AppBar(title: const Text('Gallery')),
       body: images.isEmpty
           ? const Center(child: Text('No images yet'))
           : GridView.builder(

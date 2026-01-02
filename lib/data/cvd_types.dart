@@ -1,5 +1,5 @@
 import '../utils/cvd_filters.dart';
-import '../models/CVDType.dart';
+import '../models/cvd_type.dart';
 
 final List<CVDType> cvdTypeData = [
   CVDType(
