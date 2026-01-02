@@ -1,3 +1,8 @@
+//test
+import 'dart:typed_data';
+import 'package:cvd_sim/utils/image_storing.dart';
+//test
+
 import 'package:camera/camera.dart';
 import 'package:cvd_sim/models/cvd_type.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +104,22 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
     _cameraController?.dispose();
     super.dispose();
   }
+
+  //test
+  Future<void> takePictureAndSave() async {
+    if (_cameraController == null ||
+        !_cameraController!.value.isInitialized ||
+        _cameraController!.value.isTakingPicture) {
+      return;
+    }
+
+    final XFile file = await _cameraController!.takePicture();
+    final Uint8List bytes = await file.readAsBytes();
+
+    await ImageStoring.saveImage(bytes);
+  }
+
+//test
 
   Widget _buildCameraPreview(
     double width,

@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_compare_slider/image_compare_slider.dart';
 import '../../../models/captured_image.dart';
 import '../../../models/cvd_type.dart';
 import '../../../utils/cvd_filters.dart';
+import '../../../data/cvd_types.dart';
 
 class ImageScreen extends StatefulWidget {
   final List<CapturedImage> images;
@@ -96,13 +99,14 @@ class _ImageScreenState extends State<ImageScreen> {
 
   Widget _buildImageView(CapturedImage image) {
     if (currentFilter == null) {
-      return Image.asset(image.imagePath, fit: BoxFit.contain);
+      return Image.file(File(image.imagePath))
+;
     }
 
     if (compareMode) {
       return ImageCompareSlider(
-        itemOne: Image.asset(image.imagePath, fit: BoxFit.contain),
-        itemTwo: Image.asset(image.imagePath, fit: BoxFit.contain),
+        itemOne: Image.file(File(image.imagePath)),
+        itemTwo: Image.file(File(image.imagePath)),
         itemTwoBuilder: (child, context) {
           return ColorFiltered(
             colorFilter: ColorFilter.matrix(currentFilter!.matrix),
@@ -151,9 +155,7 @@ class _ImageScreenState extends State<ImageScreen> {
     return ElevatedButton(
       onPressed: () {
         setState(() {
-          if (currentFilter == null) {
-            currentFilter = protanopiaFilter; // default
-          }
+          currentFilter ??= protanopiaFilter;
           compareMode = !compareMode;
         });
       },

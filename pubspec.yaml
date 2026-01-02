@@ -22,6 +22,10 @@ dependencies:
   uuid: ^4.3.3
   image_compare_slider: ^2.8.0
 
+  #device path stuff
+  path_provider: ^2.1.0
+  path: ^1.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

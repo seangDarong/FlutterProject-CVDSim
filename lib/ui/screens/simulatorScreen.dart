@@ -55,6 +55,12 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
     _cameraKey.currentState?.switchCamera();
   }
 
+  //test
+  void _onTakePicture() async {
+    await _cameraKey.currentState?.takePictureAndSave();
+  }
+  //test
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +95,10 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
               ),
               CameraControlBar(
                 onSwitchCamera: _onSwtichCamera,
-                onTakePicture: () {},
+                // onTakePicture: () {},
+                //test
+                onTakePicture: _onTakePicture,
+                //test
                 onGallery: _onGallery,
               ),
               if (_mode == SimulationMode.single)
