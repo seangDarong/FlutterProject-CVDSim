@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:cvd_sim/data/cvd_types.dart';
 import 'package:cvd_sim/ui/widget/simulator/filter_button.dart';
 import 'package:cvd_sim/widget/button.dart';
@@ -7,6 +8,8 @@ import '../../models/simulationMode.dart';
 import '../widget/simulator/simulationAppBar.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/CVDType.dart';
+import '../widget/simulator/cameraControlBar.dart';
+import '../widget/simulator/filter_info_card.dart';
 
 class SimulatorScreen extends StatefulWidget {
   const SimulatorScreen({super.key});
@@ -19,6 +22,7 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
   SimulationMode _mode = SimulationMode.single;
   late CVDType _selectedType;
   late CVDType _selectedTypeBottom;
+  final GlobalKey<SimulationCameraSectionState> _cameraKey = GlobalKey();
 
   void _onModeChanged(SimulationMode mode) {
     setState(() => _mode = mode);
@@ -43,25 +47,42 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
     });
   }
 
+  void _onGallery (){
+    setState(() {
+      context.push('/gallery');
+    });
+  }
+
+
+
+  void _onSwtichCamera () {
+    _cameraKey.currentState?.switchCamera();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE8F5F0),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 8.0,
+          ), // Reduced vertical
           child: Column(
             children: [
               SimulationAppBar(mode: _mode, onModeChanged: _onModeChanged),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8), // Reduced
               SizedBox(
-                height: 420,
+                height: 420, // Fixed camera height
                 child: SimulationCameraSection(
+                  key: _cameraKey,
                   mode: _mode,
                   cvdType: _selectedType,
                   bottomCvdType: _selectedTypeBottom,
                 ),
               ),
+              const SizedBox(height: 4), // Reduced
               FilterButtonRow(
                 cvdType: cvdTypeData,
                 selectedType: _selectedType,
@@ -70,10 +91,15 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
                 onTypeSelectedBottom: _onSelectedTypeBottom,
                 mode: _mode,
               ),
-              const Spacer(),
-              AppButton(
-                label: "Go to gallery",
-                onPressed: () => context.push('/gallery'),
+              CameraControlBar(
+                onSwitchCamera: _onSwtichCamera,
+                onTakePicture: () {},
+                onGallery: _onGallery,
+              ),
+              if (_mode == SimulationMode.single)
+              Expanded(
+                
+                child: FilterInfoCard(cvdType: _selectedType),
               ),
             ],
           ),

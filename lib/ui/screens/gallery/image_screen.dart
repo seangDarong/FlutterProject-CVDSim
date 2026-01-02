@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_compare_slider/image_compare_slider.dart';
 import '../../../models/capturedImage.dart';
-import '../../../models/cvdType.dart';
+import '../../../models/CVDType.dart';
 import '../../../utils/cvd_filters.dart';
 
 class ImageScreen extends StatefulWidget {
@@ -210,6 +210,8 @@ final protanopiaFilter = CVDType(
   id: 'protanopia',
   name: 'Protanopia',
   description: '',
+  prevalence: '',
+  affected: '',
   matrix: CVDFilters.protanopia,
 );
 
@@ -217,6 +219,8 @@ final deuteranopiaFilter = CVDType(
   id: 'deuteranopia',
   name: 'Deuteranopia',
   description: '',
+    prevalence: '',
+  affected: '',
   matrix: CVDFilters.deuteranopia,
 );
 
@@ -224,5 +228,7 @@ final tritanopiaFilter = CVDType(
   id: 'tritanopia',
   name: 'Tritanopia',
   description: '',
+    prevalence: '',
+  affected: '',
   matrix: CVDFilters.tritanopia,
 );
