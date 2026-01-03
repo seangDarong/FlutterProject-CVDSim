@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_compare_slider/image_compare_slider.dart';
-import '../../../../models/captured_image.dart';
+import '../../../../models/stored_image.dart';
+import '../../../../models/cvd_type.dart';
 
 class ImageViewer extends StatelessWidget {
-  final List<CapturedImage> images;
+  final List<StoredImage> images;
   final PageController controller;
   final bool compareMode;
-  final List<double>? currentFilter;
+  final CVDType currentFilter;
   final ValueChanged<int> onPageChanged;
 
   const ImageViewer({
@@ -39,29 +40,26 @@ class ImageViewer extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(CapturedImage image) {
+  Widget _buildImage(StoredImage image) {
     final baseImage = Image.file(
-      File(image.imagePath),
+      File(image.filePath),
       fit: BoxFit.cover,
     );
-
-    if (currentFilter == null) return baseImage;
 
     if (compareMode) {
       return ImageCompareSlider(
         itemOne: baseImage,
         itemTwo: baseImage,
         itemTwoBuilder: (child, _) => ColorFiltered(
-          colorFilter: ColorFilter.matrix(currentFilter!),
+          colorFilter: ColorFilter.matrix(currentFilter.matrix),
           child: child,
         ),
       );
     }
 
     return ColorFiltered(
-      colorFilter: ColorFilter.matrix(currentFilter!),
+      colorFilter: ColorFilter.matrix(currentFilter.matrix),
       child: baseImage,
     );
   }
 }
-

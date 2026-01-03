@@ -1,14 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import '../../../../models/captured_image.dart';
-import '../../../../utils/cvd_filters.dart';
+import '../../../models/stored_image.dart';
+import '../../../models/cvd_type.dart';
+import '../../../models/image_session.dart';
+import '../../../data/cvd_types.dart';
 import 'widgets/image_viewer.dart';
 import 'widgets/filter_row.dart';
 import 'widgets/image_action_row.dart';
 
 class ImageScreen extends StatefulWidget {
-  final List<CapturedImage> images;
+  final List<StoredImage> images;
   final int initialIndex;
 
   const ImageScreen({
@@ -23,16 +25,20 @@ class ImageScreen extends StatefulWidget {
 
 class _ImageScreenState extends State<ImageScreen> {
   late final PageController _pageController;
-
-  int currentIndex = 0;
-  List<double>? currentFilter;
-  bool compareMode = false;
+  late ImageSession session;
 
   @override
   void initState() {
     super.initState();
-    currentFilter = CVDFilters.normal;
-    _pageController = PageController(initialPage: widget.initialIndex);
+
+    session = ImageSession.initial(
+      widget.initialIndex,
+      cvdTypeData.first, // Normal
+    );
+
+    _pageController = PageController(
+      initialPage: widget.initialIndex,
+    );
   }
 
   @override
@@ -43,9 +49,10 @@ class _ImageScreenState extends State<ImageScreen> {
 
   void _onPageChanged(int index) {
     setState(() {
-      currentIndex = index;
-      currentFilter = null;
-      compareMode = false;
+      session = session.copyWith(
+        index: index,
+        compare: false, // compare always exits on swipe
+      );
     });
   }
 
@@ -59,10 +66,7 @@ class _ImageScreenState extends State<ImageScreen> {
           content: Text(message, textAlign: TextAlign.center),
           duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.symmetric(
-            horizontal: 60, 
-            vertical: 5,
-          ),
+          margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -93,7 +97,7 @@ class _ImageScreenState extends State<ImageScreen> {
     );
   }
 
-  Future<void> _saveImage(CapturedImage image) async {
+  Future<void> _saveImage(StoredImage image) async {
     final permission = await PhotoManager.requestPermissionExtend();
     if (!permission.isAuth) {
       _showSnackBar('Photo permission denied');
@@ -101,7 +105,7 @@ class _ImageScreenState extends State<ImageScreen> {
     }
 
     try {
-      final bytes = await File(image.imagePath).readAsBytes();
+      final bytes = await File(image.filePath).readAsBytes();
       await PhotoManager.editor.saveImage(
         bytes,
         filename: 'cvd_${image.id}.jpg',
@@ -113,10 +117,10 @@ class _ImageScreenState extends State<ImageScreen> {
   }
 
   Future<void> _deleteImageConfirmed() async {
-    final imageToDelete = widget.images[currentIndex];
+    final imageToDelete = widget.images[session.index];
 
     try {
-      await File(imageToDelete.imagePath).delete();
+      await File(imageToDelete.filePath).delete();
     } catch (_) {
       _showSnackBar('Failed to delete image');
       return;
@@ -125,7 +129,6 @@ class _ImageScreenState extends State<ImageScreen> {
     if (!mounted) return;
 
     _showSnackBar('Image deleted');
-
     Navigator.pop(context, imageToDelete.id);
   }
 
@@ -142,32 +145,33 @@ class _ImageScreenState extends State<ImageScreen> {
               child: ImageViewer(
                 images: widget.images,
                 controller: _pageController,
-                compareMode: compareMode,
-                currentFilter: currentFilter,
+                compareMode: session.compare,
+                currentFilter: session.filter,
                 onPageChanged: _onPageChanged,
               ),
             ),
-
             const SizedBox(height: 20),
-
             FilterRow(
-              currentFilter: currentFilter,
-              onFilterSelected: (filter) {
-                setState(() => currentFilter = filter);
+              currentFilter: session.filter,
+              onFilterSelected: (type) {
+                setState(() {
+                  session = session.copyWith(filter: type);
+                });
               },
             ),
-
             const SizedBox(height: 20),
-
             ImageActionsRow(
-              compareMode: compareMode,
+              compareMode: session.compare,
               onCompareToggle: () {
-                setState(() => compareMode = !compareMode);
+                setState(() {
+                  session = session.copyWith(
+                    compare: !session.compare,
+                  );
+                });
               },
-              onSave: () => _saveImage(widget.images[currentIndex]),
+              onSave: () => _saveImage(widget.images[session.index]),
               onDelete: _confirmDelete,
             ),
-
           ],
         ),
       ),

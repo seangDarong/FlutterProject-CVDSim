@@ -2,13 +2,14 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import '../models/captured_image.dart';
 import 'package:uuid/uuid.dart';
+
+import '../models/stored_image.dart';
 
 class ImageStoring {
   static const _uuid = Uuid();
 
-  /// Base directory: iOS app Documents
+  /// Base directory: iOS app Documents/images
   static Future<Directory> _imagesDir() async {
     final dir = await getApplicationDocumentsDirectory();
     final imagesDir = Directory(p.join(dir.path, 'images'));
@@ -21,7 +22,7 @@ class ImageStoring {
   }
 
   /// Save image bytes to app storage
-  static Future<CapturedImage> saveImage(Uint8List bytes) async {
+  static Future<StoredImage> saveImage(Uint8List bytes) async {
     final dir = await _imagesDir();
     final id = _uuid.v4();
     final filePath = p.join(dir.path, '$id.jpg');
@@ -29,38 +30,39 @@ class ImageStoring {
     final file = File(filePath);
     await file.writeAsBytes(bytes);
 
-    return CapturedImage(
+    return StoredImage(
       id: id,
-      imagePath: filePath,
-      cvdType: 'none',
+      filePath: filePath,
       createdAt: DateTime.now(),
     );
   }
 
   /// Load all saved images
-  static Future<List<CapturedImage>> loadImages() async {
+  static Future<List<StoredImage>> loadImages() async {
     final dir = await _imagesDir();
+
     final files = dir
         .listSync()
         .whereType<File>()
         .where((f) => f.path.endsWith('.jpg'))
         .toList();
 
-    return files.map((file) {
+    final images = files.map((file) {
       final id = p.basenameWithoutExtension(file.path);
-      return CapturedImage(
+      return StoredImage(
         id: id,
-        imagePath: file.path,
-        cvdType: 'none',
+        filePath: file.path,
         createdAt: file.lastModifiedSync(),
       );
-    }).toList()
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    }).toList();
+
+    images.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return images;
   }
 
-  /// Delete image
-  static Future<void> deleteImage(CapturedImage image) async {
-    final file = File(image.imagePath);
+  /// Delete image from disk
+  static Future<void> deleteImage(StoredImage image) async {
+    final file = File(image.filePath);
     if (await file.exists()) {
       await file.delete();
     }

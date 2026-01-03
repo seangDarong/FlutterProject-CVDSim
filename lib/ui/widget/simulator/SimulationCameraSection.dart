@@ -10,13 +10,21 @@ import '../../../models/simulation_mode.dart';
 
 class SimulationCameraSection extends StatefulWidget {
   final SimulationMode mode;
-  final CVDType cvdType;
-  final CVDType bottomCvdType;
+  // final CVDType cvdType;
+  // final CVDType bottomCvdType;
+  //test
+  final CVDType topFilter;
+  final CVDType bottomFilter;
+  //test
   const SimulationCameraSection({
     super.key,
     required this.mode,
-    required this.cvdType,
-    required this.bottomCvdType,
+    // required this.cvdType,
+    // required this.bottomCvdType,
+    //test
+    required this.topFilter,
+    required this.bottomFilter,
+    //test
   });
 
   @override
@@ -119,7 +127,10 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
     final XFile file = await _cameraController!.takePicture();
     final Uint8List bytes = await file.readAsBytes();
 
-    await ImageStoring.saveImage(bytes);
+    // await ImageStoring.saveImage(bytes);
+    //test
+    final storedImage = await ImageStoring.saveImage(bytes);
+    //test
   }
 
 //test
@@ -165,7 +176,10 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
     }
 
     if (widget.mode == SimulationMode.single) {
-      return _buildCameraPreview(368, 420, widget.cvdType);
+      // return _buildCameraPreview(368, 420, widget.cvdType);
+      //test
+      return _buildCameraPreview(368, 420, widget.topFilter);
+      //test 
     }
 
     return Column(
@@ -174,7 +188,10 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
         _buildCameraPreview(
           368,
           210,
-          widget.cvdType,
+          // widget.cvdType,
+          //test
+          widget.topFilter,
+          //test
           const BorderRadius.vertical(
             bottom: Radius.circular(0),
             top: Radius.circular(12),
@@ -183,7 +200,10 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
         _buildCameraPreview(
           368,
           210,
-          widget.bottomCvdType,
+          // widget.bottomCvdType,
+          //test
+          widget.bottomFilter,
+          //test
           const BorderRadius.vertical(
             top: Radius.circular(0),
             bottom: Radius.circular(12),

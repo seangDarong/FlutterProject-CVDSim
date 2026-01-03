@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../../../models/captured_image.dart';
+import '../../../models/stored_image.dart';
 import '../../../utils/image_storing.dart';
 import 'image_screen.dart';
 
@@ -12,7 +12,7 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
-  List<CapturedImage> images = [];
+  List<StoredImage> images = [];
   bool loading = true;
 
   @override
@@ -32,7 +32,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
     return Scaffold(
@@ -53,11 +55,14 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
                 return GestureDetector(
                   onTap: () async {
-                    final deletedImageId = await Navigator.push<String>(
+                    final deletedImageId =
+                        await Navigator.push<String>(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            ImageScreen(images: images, initialIndex: index),
+                        builder: (_) => ImageScreen(
+                          images: images,
+                          initialIndex: index,
+                        ),
                       ),
                     );
 
@@ -70,7 +75,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(
-                        File(image.imagePath),
+                        File(image.filePath),
                         fit: BoxFit.cover,
                       ),
                     ),

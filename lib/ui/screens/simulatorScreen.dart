@@ -80,8 +80,12 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
                 child: SimulationCameraSection(
                   key: _cameraKey,
                   mode: _mode,
-                  cvdType: _selectedType,
-                  bottomCvdType: _selectedTypeBottom,
+                  // cvdType: _selectedType,
+                  // bottomCvdType: _selectedTypeBottom,
+                  //test
+                  topFilter: _selectedType,
+                  bottomFilter: _selectedTypeBottom,
+                  //test
                 ),
               ),
               const SizedBox(height: 4), // Reduced
