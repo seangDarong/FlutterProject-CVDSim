@@ -47,4 +47,4 @@ app.*.map.json
 ios/Pods/
 ios/Podfile.lock
 ios/Runner.xcworkspace/xcuserdata/
-ios/Runner.xcodeproj/project.pbxproj
+# ios/Runner.xcodeproj/project.pbxproj
