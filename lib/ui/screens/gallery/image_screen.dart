@@ -31,7 +31,7 @@ class _ImageScreenState extends State<ImageScreen> {
   @override
   void initState() {
     super.initState();
-    currentIndex = widget.initialIndex;
+    currentFilter = CVDFilters.normal;
     _pageController = PageController(initialPage: widget.initialIndex);
   }
 
@@ -49,17 +49,6 @@ class _ImageScreenState extends State<ImageScreen> {
     });
   }
 
-  // void _showSnackBar(String message) {
-  //   if (!mounted) return;
-  //   ScaffoldMessenger.of(context)
-  //     ..clearSnackBars()
-  //     ..showSnackBar(
-  //       SnackBar(
-  //         content: Text(message),
-  //         duration: const Duration(seconds: 2),
-  //       ),
-  //     );
-  // }
   void _showSnackBar(String message) {
     if (!mounted) return;
 
@@ -68,17 +57,40 @@ class _ImageScreenState extends State<ImageScreen> {
       ..showSnackBar(
         SnackBar(
           content: Text(message, textAlign: TextAlign.center),
-          duration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.symmetric(
-            horizontal: 60, // controls width
-            vertical: 20,
+            horizontal: 60, 
+            vertical: 5,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
         ),
       );
+  }
+
+  void _confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete image?'),
+        content: const Text('This action cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _deleteImageConfirmed();
+            },
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _saveImage(CapturedImage image) async {
@@ -100,20 +112,21 @@ class _ImageScreenState extends State<ImageScreen> {
     }
   }
 
-  Future<void> _deleteImage() async {
-    final image = widget.images[currentIndex];
+  Future<void> _deleteImageConfirmed() async {
+    final imageToDelete = widget.images[currentIndex];
 
     try {
-      await File(image.imagePath).delete();
-      _showSnackBar('Image deleted');
-
-      // Tell gallery to refresh
-      if (mounted) {
-        Navigator.pop(context, true);
-      }
+      await File(imageToDelete.imagePath).delete();
     } catch (_) {
       _showSnackBar('Failed to delete image');
+      return;
     }
+
+    if (!mounted) return;
+
+    _showSnackBar('Image deleted');
+
+    Navigator.pop(context, imageToDelete.id);
   }
 
   @override
@@ -124,9 +137,8 @@ class _ImageScreenState extends State<ImageScreen> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 10),
-
-            Expanded(
+            AspectRatio(
+              aspectRatio: 3 / 4,
               child: ImageViewer(
                 images: widget.images,
                 controller: _pageController,
@@ -141,9 +153,7 @@ class _ImageScreenState extends State<ImageScreen> {
             FilterRow(
               currentFilter: currentFilter,
               onFilterSelected: (filter) {
-                setState(() {
-                  currentFilter = currentFilter == filter ? null : filter;
-                });
+                setState(() => currentFilter = filter);
               },
             ),
 
@@ -152,16 +162,12 @@ class _ImageScreenState extends State<ImageScreen> {
             ImageActionsRow(
               compareMode: compareMode,
               onCompareToggle: () {
-                setState(() {
-                  currentFilter ??= CVDFilters.protanopia;
-                  compareMode = !compareMode;
-                });
+                setState(() => compareMode = !compareMode);
               },
               onSave: () => _saveImage(widget.images[currentIndex]),
-              onDelete: _deleteImage,
+              onDelete: _confirmDelete,
             ),
 
-            const SizedBox(height: 10),
           ],
         ),
       ),

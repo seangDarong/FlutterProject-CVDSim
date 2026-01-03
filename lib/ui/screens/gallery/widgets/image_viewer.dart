@@ -30,22 +30,22 @@ class ImageViewer extends StatelessWidget {
       onPageChanged: onPageChanged,
       itemBuilder: (context, index) {
         final image = images[index];
-        return Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: _buildImage(image),
-          ),
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: _buildImage(image),
         );
       },
     );
   }
 
   Widget _buildImage(CapturedImage image) {
-    final baseImage = Image.file(File(image.imagePath));
+    final baseImage = Image.file(
+      File(image.imagePath),
+      fit: BoxFit.cover,
+    );
 
-    if (currentFilter == null) {
-      return baseImage;
-    }
+    if (currentFilter == null) return baseImage;
 
     if (compareMode) {
       return ImageCompareSlider(
@@ -64,3 +64,4 @@ class ImageViewer extends StatelessWidget {
     );
   }
 }
+

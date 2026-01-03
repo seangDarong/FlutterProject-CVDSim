@@ -76,7 +76,10 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
 
     _cameraController = CameraController(
       _cameras[cameraIndex],
-      ResolutionPreset.high,
+      // ResolutionPreset.high,
+      //test
+      ResolutionPreset.medium,
+      //test
       enableAudio: false,
     );
 

@@ -17,40 +17,57 @@ class ImageActionsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: _actionButton('Save', onSave)),
-        const SizedBox(width: 10),
-        Expanded(child: _compareButton()),
-        const SizedBox(width: 10),
-        Expanded(child: _actionButton('Delete', onDelete)),
+        _action('Save', onSave),
+        _action(
+          'Compare',
+          onCompareToggle,
+          active: compareMode,
+        ),
+        _action('Delete', onDelete, danger: true),
       ],
     );
   }
 
-  Widget _actionButton(String label, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-      ),
-      child: Text(label),
-    );
-  }
+  Widget _action(
+    String label,
+    VoidCallback onTap, {
+    bool active = false,
+    bool danger = false,
+  }) {
+    const primaryColor = Color(0xFF4DB6AC);
 
-  Widget _compareButton() {
-    return ElevatedButton(
-      onPressed: onCompareToggle,
-      style: ElevatedButton.styleFrom(
-        backgroundColor:
-            compareMode ? Colors.blue : Colors.grey.shade600,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 90,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: active
+              ? primaryColor.withOpacity(0.15)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: danger
+                ? Colors.red
+                : active
+                    ? primaryColor
+                    : Colors.grey.shade300,
+            width: 1.5,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              fontFamily: 'DMSans',
+              fontSize: 13,
+              color: danger ? Colors.red : Colors.black,
+            ),
+          ),
         ),
       ),
-      child: const Text('Compare'),
     );
   }
 }

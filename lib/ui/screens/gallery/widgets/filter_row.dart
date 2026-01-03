@@ -14,26 +14,62 @@ class FilterRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(child: _button('Protanopia', CVDFilters.protanopia)),
-        const SizedBox(width: 10),
-        Expanded(child: _button('Deuteranopia', CVDFilters.deuteranopia)),
-        const SizedBox(width: 10),
-        Expanded(child: _button('Tritanopia', CVDFilters.tritanopia)),
+        _filterButton('Normal', CVDFilters.normal),
+        _filterButton('Protanopia', CVDFilters.protanopia),
+        _filterButton('Deuteranopia', CVDFilters.deuteranopia),
+        _filterButton('Tritanopia', CVDFilters.tritanopia),
       ],
     );
   }
 
-  Widget _button(String label, List<double> filter) {
-    final isActive = identical(currentFilter, filter);
+  Widget _filterButton(String label, List<double> filter) {
+    final bool isSelected = identical(currentFilter, filter);
+    const primaryColor = Color(0xFF4DB6AC);
 
-    return ElevatedButton(
-      onPressed: () => onFilterSelected(filter),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isActive ? Colors.green : Colors.grey,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    return GestureDetector(
+      onTap: () => onFilterSelected(filter),
+      child: Container(
+        width: 80,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? primaryColor.withOpacity(0.1)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? primaryColor : Colors.grey.shade300,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 22,
+              height: 22,
+              decoration: const BoxDecoration(
+                color: primaryColor,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.remove_red_eye,
+                color: Colors.white,
+                size: 12,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                fontFamily: 'DMSans',
+              ),
+            ),
+          ],
+        ),
       ),
-      child: Text(label),
     );
   }
 }

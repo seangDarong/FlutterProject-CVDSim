@@ -32,9 +32,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -45,7 +43,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
               padding: const EdgeInsets.all(10),
               itemCount: images.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 4,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
               ),
@@ -54,25 +53,26 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
                 return GestureDetector(
                   onTap: () async {
-                    final deleted = await Navigator.push<bool>(
+                    final deletedImageId = await Navigator.push<String>(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ImageScreen(
-                          images: images,
-                          initialIndex: index,
-                        ),
+                        builder: (_) =>
+                            ImageScreen(images: images, initialIndex: index),
                       ),
                     );
 
-                    if (deleted == true) {
-                      _loadImages();
+                    if (deletedImageId != null) {
+                      await _loadImages();
                     }
                   },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(image.imagePath),
-                      fit: BoxFit.cover,
+                  child: Hero(
+                    tag: image.id,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        File(image.imagePath),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 );
