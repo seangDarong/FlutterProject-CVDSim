@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_compare_slider/image_compare_slider.dart';
-import '../../../models/captured_image.dart';
-import '../../../models/cvd_type.dart';
-import '../../../utils/cvd_filters.dart';
-import '../../../data/cvd_types.dart';
+import 'package:photo_manager/photo_manager.dart';
+import '../../../../models/captured_image.dart';
+import '../../../../utils/cvd_filters.dart';
+import 'widgets/image_viewer.dart';
+import 'widgets/filter_row.dart';
+import 'widgets/image_action_row.dart';
 
 class ImageScreen extends StatefulWidget {
   final List<CapturedImage> images;
@@ -23,9 +23,9 @@ class ImageScreen extends StatefulWidget {
 
 class _ImageScreenState extends State<ImageScreen> {
   late final PageController _pageController;
-  int currentIndex = 0;
 
-  CVDType? currentFilter;
+  int currentIndex = 0;
+  List<double>? currentFilter;
   bool compareMode = false;
 
   @override
@@ -41,6 +41,81 @@ class _ImageScreenState extends State<ImageScreen> {
     super.dispose();
   }
 
+  void _onPageChanged(int index) {
+    setState(() {
+      currentIndex = index;
+      currentFilter = null;
+      compareMode = false;
+    });
+  }
+
+  // void _showSnackBar(String message) {
+  //   if (!mounted) return;
+  //   ScaffoldMessenger.of(context)
+  //     ..clearSnackBars()
+  //     ..showSnackBar(
+  //       SnackBar(
+  //         content: Text(message),
+  //         duration: const Duration(seconds: 2),
+  //       ),
+  //     );
+  // }
+  void _showSnackBar(String message) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message, textAlign: TextAlign.center),
+          duration: const Duration(seconds: 1),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 60, // controls width
+            vertical: 20,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+      );
+  }
+
+  Future<void> _saveImage(CapturedImage image) async {
+    final permission = await PhotoManager.requestPermissionExtend();
+    if (!permission.isAuth) {
+      _showSnackBar('Photo permission denied');
+      return;
+    }
+
+    try {
+      final bytes = await File(image.imagePath).readAsBytes();
+      await PhotoManager.editor.saveImage(
+        bytes,
+        filename: 'cvd_${image.id}.jpg',
+      );
+      _showSnackBar('Saved to Photos');
+    } catch (_) {
+      _showSnackBar('Failed to save image');
+    }
+  }
+
+  Future<void> _deleteImage() async {
+    final image = widget.images[currentIndex];
+
+    try {
+      await File(image.imagePath).delete();
+      _showSnackBar('Image deleted');
+
+      // Tell gallery to refresh
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
+    } catch (_) {
+      _showSnackBar('Failed to delete image');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,42 +127,38 @@ class _ImageScreenState extends State<ImageScreen> {
             const SizedBox(height: 10),
 
             Expanded(
-              child: PageView.builder(
+              child: ImageViewer(
+                images: widget.images,
                 controller: _pageController,
-                physics: compareMode
-                    ? const NeverScrollableScrollPhysics()
-                    : const PageScrollPhysics(),
-                itemCount: widget.images.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                    currentFilter = null;
-                    compareMode = false;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  final image = widget.images[index];
-                  return Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: _buildImageView(image),
-                    ),
-                  );
-                },
+                compareMode: compareMode,
+                currentFilter: currentFilter,
+                onPageChanged: _onPageChanged,
               ),
             ),
 
             const SizedBox(height: 20),
-            _buildFilterButtons(),
+
+            FilterRow(
+              currentFilter: currentFilter,
+              onFilterSelected: (filter) {
+                setState(() {
+                  currentFilter = currentFilter == filter ? null : filter;
+                });
+              },
+            ),
+
             const SizedBox(height: 20),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _actionButton(label: 'Save', onPressed: _savePlaceholder),
-                _compareToggle(),
-                _actionButton(label: 'Delete', onPressed: _showDeleteDialog),
-              ],
+            ImageActionsRow(
+              compareMode: compareMode,
+              onCompareToggle: () {
+                setState(() {
+                  currentFilter ??= CVDFilters.protanopia;
+                  compareMode = !compareMode;
+                });
+              },
+              onSave: () => _saveImage(widget.images[currentIndex]),
+              onDelete: _deleteImage,
             ),
 
             const SizedBox(height: 10),
@@ -96,140 +167,4 @@ class _ImageScreenState extends State<ImageScreen> {
       ),
     );
   }
-
-  Widget _buildImageView(CapturedImage image) {
-    if (currentFilter == null) {
-      return Image.file(File(image.imagePath))
-;
-    }
-
-    if (compareMode) {
-      return ImageCompareSlider(
-        itemOne: Image.file(File(image.imagePath)),
-        itemTwo: Image.file(File(image.imagePath)),
-        itemTwoBuilder: (child, context) {
-          return ColorFiltered(
-            colorFilter: ColorFilter.matrix(currentFilter!.matrix),
-            child: child,
-          );
-        },
-      );
-    }
-
-    return ColorFiltered(
-      colorFilter: ColorFilter.matrix(currentFilter!.matrix),
-      child: Image.asset(image.imagePath, fit: BoxFit.contain),
-    );
-  }
-
-  Widget _buildFilterButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _filterButton(protanopiaFilter),
-        _filterButton(deuteranopiaFilter),
-        _filterButton(tritanopiaFilter),
-      ],
-    );
-  }
-
-  Widget _filterButton(CVDType filter) {
-    final bool isActive = currentFilter?.id == filter.id;
-
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          currentFilter = isActive ? null : filter;
-          // compareMode intentionally preserved
-        });
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isActive ? Colors.green : Colors.grey,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Text(filter.name),
-    );
-  }
-
-  Widget _compareToggle() {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          currentFilter ??= protanopiaFilter;
-          compareMode = !compareMode;
-        });
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: compareMode ? Colors.blue : Colors.grey.shade600,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: const Text('Compare'),
-    );
-  }
-
-  Widget _actionButton({
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Text(label),
-    );
-  }
-
-  void _savePlaceholder() {}
-
-  void _showDeleteDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Delete image?'),
-          content: const Text('This action cannot be undone.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
-
-// Filters unchanged
-final protanopiaFilter = CVDType(
-  id: 'protanopia',
-  name: 'Protanopia',
-  description: '',
-  prevalence: '',
-  affected: '',
-  matrix: CVDFilters.protanopia,
-);
-
-final deuteranopiaFilter = CVDType(
-  id: 'deuteranopia',
-  name: 'Deuteranopia',
-  description: '',
-  prevalence: '',
-  affected: '',
-  matrix: CVDFilters.deuteranopia,
-);
-
-final tritanopiaFilter = CVDType(
-  id: 'tritanopia',
-  name: 'Tritanopia',
-  description: '',
-  prevalence: '',
-  affected: '',
-  matrix: CVDFilters.tritanopia,
-);
