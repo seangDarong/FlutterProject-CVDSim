@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cvd_sim/widget/button.dart';
+import 'package:cvd_sim/ui/widgets/button.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});

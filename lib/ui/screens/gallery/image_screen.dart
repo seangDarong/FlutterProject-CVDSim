@@ -5,9 +5,9 @@ import '../../../models/stored_image.dart';
 import '../../../models/cvd_type.dart';
 import '../../../models/image_session.dart';
 import '../../../data/cvd_types.dart';
-import 'widgets/image_viewer.dart';
-import 'widgets/filter_row.dart';
-import 'widgets/image_action_row.dart';
+import '../../widgets/image_viewer.dart';
+import '../../widgets/simulator/filter_row.dart';
+import '../../widgets/image_action_row.dart';
 
 class ImageScreen extends StatefulWidget {
   final List<StoredImage> images;

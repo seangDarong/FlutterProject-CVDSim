@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../models/simulation_mode.dart';
-import 'modeToggle.dart';
+import 'mode_toggle.dart';
 
 class SimulationAppBar extends StatelessWidget {
   final SimulationMode mode;

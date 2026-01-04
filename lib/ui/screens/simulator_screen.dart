@@ -1,13 +1,13 @@
 import 'package:cvd_sim/data/cvd_types.dart';
-import 'package:cvd_sim/ui/widget/simulator/filter_button.dart';
+import 'package:cvd_sim/ui/widgets/simulator/filter_button.dart';
 import 'package:flutter/material.dart';
-import '../widget/simulator/SimulationCameraSection.dart';
+import '../widgets/simulator/simulation_camera_section.dart';
 import '../../models/simulation_mode.dart';
-import '../widget/simulator/simulationAppBar.dart';
+import '../widgets/simulator/simulation_app_bar.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/cvd_type.dart';
-import '../widget/simulator/cameraControlBar.dart';
-import '../widget/simulator/filter_info_card.dart';
+import '../widgets/simulator/camera_control_bar.dart';
+import '../widgets/simulator/filter_info_card.dart';
 
 class SimulatorScreen extends StatefulWidget {
   const SimulatorScreen({super.key});

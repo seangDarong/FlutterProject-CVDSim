@@ -1,9 +1,9 @@
 import 'package:cvd_sim/ui/screens/gallery/gallery_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cvd_sim/ui/screens/landingScreen.dart';
-import 'package:cvd_sim/ui/screens/simulatorScreen.dart';
-import 'package:cvd_sim/ui/screens/homeScreen.dart';
+import 'package:cvd_sim/ui/screens/landing_screen.dart';
+import 'package:cvd_sim/ui/screens/simulator_screen.dart';
+import 'package:cvd_sim/ui/screens/home_screen.dart';
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();

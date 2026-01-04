@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Simple reusable button used across the app.
+
 class AppButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
