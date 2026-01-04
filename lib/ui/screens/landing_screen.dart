@@ -59,10 +59,9 @@ class _LandingScreenState extends State<LandingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-        child: SafeArea(
-          child: Center(
+      body:
+        
+          Center(
             child: Container(
               constraints: const BoxConstraints(maxWidth: 720),
               width: double.infinity,
@@ -139,8 +138,6 @@ class _LandingScreenState extends State<LandingScreen>
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }
