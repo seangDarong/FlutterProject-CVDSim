@@ -1,5 +1,5 @@
 import 'package:cvd_sim/data/cvd_types.dart';
-import 'package:cvd_sim/ui/widgets/simulator/filter_button.dart';
+import 'package:cvd_sim/ui/widgets/filter_button.dart';
 import 'package:flutter/material.dart';
 import '../widgets/simulator/simulation_camera_section.dart';
 import '../../models/simulation_mode.dart';

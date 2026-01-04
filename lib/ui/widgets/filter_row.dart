@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../data/cvd_types.dart';
-import '../../../models/cvd_type.dart';
+import '../../data/cvd_types.dart';
+import '../../models/cvd_type.dart';
 
 class FilterRow extends StatelessWidget {
   final CVDType currentFilter;

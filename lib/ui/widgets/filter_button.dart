@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../models/cvd_type.dart';
-import '../../../models/simulation_mode.dart';
+import '../../models/cvd_type.dart';
+import '../../models/simulation_mode.dart';
 
 class FilterButton extends StatelessWidget {
   final CVDType cvdType;
