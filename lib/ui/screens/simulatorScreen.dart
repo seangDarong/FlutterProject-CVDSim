@@ -64,19 +64,19 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8F5F0),
+      backgroundColor: const Color(0xFFF7F9FA),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
             vertical: 8.0,
-          ), // Reduced vertical
+          ), 
           child: Column(
             children: [
               SimulationAppBar(mode: _mode, onModeChanged: _onModeChanged),
-              const SizedBox(height: 8), // Reduced
+              const SizedBox(height: 8), 
               SizedBox(
-                height: 420, // Fixed camera height
+                height: 420,
                 child: SimulationCameraSection(
                   key: _cameraKey,
                   mode: _mode,
