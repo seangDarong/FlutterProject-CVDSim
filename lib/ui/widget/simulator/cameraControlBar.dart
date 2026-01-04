@@ -23,10 +23,10 @@ class CameraControlBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          GestureDetector(
-            onTap: onSwitchCamera,
+            GestureDetector(
+            onTap: onGallery,
             child: const Icon(
-              Icons.cameraswitch_outlined,
+              Icons.photo_library_outlined,
               color: Colors.black,
               size: 28,
             ),
@@ -48,9 +48,9 @@ class CameraControlBar extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: onGallery,
+            onTap: onSwitchCamera,
             child: const Icon(
-              Icons.photo_library_outlined,
+              Icons.cameraswitch_outlined,
               color: Colors.black,
               size: 28,
             ),
