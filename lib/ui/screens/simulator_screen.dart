@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../models/cvd_type.dart';
 import '../widgets/simulator/camera_control_bar.dart';
 import '../widgets/simulator/filter_info_card.dart';
+import 'package:flutter/services.dart';
 
 class SimulatorScreen extends StatefulWidget {
   const SimulatorScreen({super.key});
@@ -57,6 +58,7 @@ class _SimulatorScreenState extends State<SimulatorScreen> {
 
   //test
   void _onTakePicture() async {
+    HapticFeedback.lightImpact();
     await _cameraKey.currentState?.takePictureAndSave();
   }
   //test
