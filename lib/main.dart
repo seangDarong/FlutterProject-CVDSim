@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cvd_sim/ui/screens/landing_screen.dart';
 import 'package:cvd_sim/ui/screens/simulator_screen.dart';
 import 'package:cvd_sim/ui/screens/home_screen.dart';
+import 'package:flutter/services.dart';
 
 // Future<void> main() async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,10 @@ import 'package:cvd_sim/ui/screens/home_screen.dart';
 // }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(const MyApp());
 }
 
