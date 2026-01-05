@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_compare_slider/image_compare_slider.dart';
-import '../../models/stored_image.dart';
-import '../../models/cvd_type.dart';
+import '../../../models/stored_image.dart';
+import '../../../models/cvd_type.dart';
 
 class ImageViewer extends StatelessWidget {
   final List<StoredImage> images;

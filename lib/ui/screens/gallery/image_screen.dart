@@ -2,12 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import '../../../models/stored_image.dart';
-import '../../../models/cvd_type.dart';
+// import '../../../models/cvd_type.dart';
 import '../../../models/image_session.dart';
 import '../../../data/cvd_types.dart';
-import '../../widgets/image_viewer.dart';
-import '../../widgets/filter_row.dart';
-import '../../widgets/image_action_row.dart';
+import '../../widgets/image_screen/image_viewer.dart';
+import '../../widgets/image_screen/filter_row.dart';
+import '../../widgets/image_screen/image_action_row.dart';
 
 class ImageScreen extends StatefulWidget {
   final List<StoredImage> images;
