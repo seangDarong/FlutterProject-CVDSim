@@ -34,20 +34,20 @@ class ImageActionsRow extends StatelessWidget {
     String label,
     VoidCallback onTap, {
     bool active = false,
-    bool danger = false,
+    bool danger = false, 
   }) {
     const primaryColor = Color(0xFF4DB6AC);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 90,
+        width: 80,
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           color: active
-              ? primaryColor.withOpacity(0.15)
+              ? primaryColor
               : Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: danger
                 ? Colors.red

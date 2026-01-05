@@ -51,15 +51,16 @@ class _ImageScreenState extends State<ImageScreen> {
     setState(() {
       session = session.copyWith(
         index: index,
-        compare: false, // compare always exits on swipe
+        compare: false,
       );
     });
   }
+  // nvm understand now, but still dont quite understand why compare to false is needed cuz to be able to swipe compare must be false, no?
 
   void _showSnackBar(String message) {
-    if (!mounted) return;
+    if (!mounted) return; //what is mounted first ive head of it 
 
-    ScaffoldMessenger.of(context)
+    ScaffoldMessenger.of(context) // i assume all standard snackbar things here
       ..clearSnackBars()
       ..showSnackBar(
         SnackBar(
@@ -95,10 +96,10 @@ class _ImageScreenState extends State<ImageScreen> {
         ],
       ),
     );
-  }
+  } //simple dialog box with 2 options one close the dialoge the other execute the actual delete
 
   Future<void> _saveImage(StoredImage image) async {
-    final permission = await PhotoManager.requestPermissionExtend();
+    final permission = await PhotoManager.requestPermissionExtend(); //iddk
     if (!permission.isAuth) {
       _showSnackBar('Photo permission denied');
       return;
@@ -114,7 +115,7 @@ class _ImageScreenState extends State<ImageScreen> {
     } catch (_) {
       _showSnackBar('Failed to save image');
     }
-  }
+  } // need help explaining many new terms
 
   Future<void> _deleteImageConfirmed() async {
     final imageToDelete = widget.images[session.index];
@@ -130,7 +131,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
     _showSnackBar('Image deleted');
     Navigator.pop(context, imageToDelete.id);
-  }
+  } // delete simple to understand but still need more context or help understanding the mount stuff 
 
   @override
   Widget build(BuildContext context) {

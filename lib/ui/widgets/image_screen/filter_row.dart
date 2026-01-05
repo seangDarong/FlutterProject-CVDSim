@@ -16,54 +16,58 @@ class FilterRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: cvdTypeData.map((type) {
-        final isSelected = type.id == currentFilter.id;
-        const primaryColor = Color(0xFF4DB6AC);
+      children: cvdTypeData.map(_buildFilterButton).toList(),
+    );
+  }
 
-        return GestureDetector(
-          onTap: () => onFilterSelected(type),
-          child: Container(
-            width: 80,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? primaryColor
-                  : Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isSelected ? primaryColor : Colors.grey.shade300,
-                width: 1.5,
+  Widget _buildFilterButton(CVDType type) {
+    final bool isSelected = type.id == currentFilter.id;
+    const primaryColor = Color(0xFF4DB6AC);
+
+    return GestureDetector(
+      onTap: () => onFilterSelected(type),
+      child: Container(
+        width: 80,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? primaryColor : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? primaryColor : Colors.grey.shade300,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          children: [
+            _buildIcon(primaryColor),
+            const SizedBox(height: 4),
+            Text(
+              type.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 10,
+                fontFamily: 'DMSans',
               ),
             ),
-            child: Column(
-              children: [
-                Container(
-                  width: 22,
-                  height: 22,
-                  decoration: const BoxDecoration(
-                    color: primaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.white,
-                    size: 12,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  type.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontFamily: 'DMSans',
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIcon(Color color) {
+    return Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+      ),
+      child: const Icon(
+        Icons.remove_red_eye,
+        color: Colors.white,
+        size: 12,
+      ),
     );
   }
 }
