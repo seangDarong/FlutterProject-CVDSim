@@ -58,14 +58,14 @@ class SimulationCameraSectionState extends State<SimulationCameraSection> {
     for (final camera in allCameras) {
       if (camera.lensDirection == CameraLensDirection.back &&
           backCamera == null) {
-        backCamera = camera; // First back camera (usually 1x)
+        backCamera = camera; 
       } else if (camera.lensDirection == CameraLensDirection.front &&
           frontCamera == null) {
-        frontCamera = camera; // First front camera
+        frontCamera = camera; 
       }
     }
 
-    // Add cameras in order: back first, then front
+    
     if (backCamera != null) _cameras.add(backCamera);
     if (frontCamera != null) _cameras.add(frontCamera);
 
