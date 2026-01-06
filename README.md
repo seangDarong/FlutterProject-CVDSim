@@ -170,5 +170,3 @@ MIT License — do whatever you want with it! Just don't blame me if something b
 - Color blindness simulation matrices based on research by Machado, Oliveira, and Fernandes
 - Built for Mobile Development course, Year 3
 
-
-**Made with ❤️ and Flutter**
