@@ -16,9 +16,11 @@ class _GalleryScreenState extends State<GalleryScreen> {
   bool loading = true; //for loading screen
 
   Future<void> _loadImages() async {
-    final loadedImages = await ImageStoring.loadImages(); //return the list of storedimages with func from imagestoring
+    final loadedImages =
+        await ImageStoring.loadImages(); //return the list of storedimages with func from imagestoring
     setState(() {
-      images = loadedImages; //initially or update the images list with our loaded images
+      images =
+          loadedImages; //initially or update the images list with our loaded images
       loading = false; //when done loading no more loading screen
     });
   } //
@@ -29,20 +31,18 @@ class _GalleryScreenState extends State<GalleryScreen> {
     _loadImages();
   } //for the initial load
 
-
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     } //loading screen
 
     return Scaffold(
       appBar: AppBar(title: const Text('Gallery')),
       body: images.isEmpty
           ? const Center(child: Text('No images yet')) //if no images
-          : GridView.builder( //grid layout for consistency 
+          : GridView.builder(
+              //grid layout for consistency
               padding: const EdgeInsets.all(10),
               itemCount: images.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -54,35 +54,27 @@ class _GalleryScreenState extends State<GalleryScreen> {
               itemBuilder: (context, index) {
                 final image = images[index];
                 return GestureDetector(
-
-                //what is happening here with smth smth deleted image huh?
-                //perhaps up this to a function upstairs? kinda hard for me 
-                //but i can tell that this is the on tap go to imagescreen, i just dont know what the deleted image id thing is for and why it's encompasing the nav too?
-                //basically nav push normal stuff, but can also have a future to recieve a value in imagescreen
-                //this value determines whether we reload below this block, if the returned value is null reload if not, not type shi
+                  //basically nav push normal stuff, but can also a recieve a future string from imagescreen
+                  //this value determines whether we reload below this block
                   onTap: () async {
-                    final deletedImageId =
-                        await Navigator.push<String>(
+                    final deletedImageId = await Navigator.push<String>(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ImageScreen(
-                          images: images,
-                          initialIndex: index,
-                        ),
+                        builder: (_) =>
+                            ImageScreen(images: images, initialIndex: index),
                       ),
                     );
 
-                    //idk what this is too, but i can kinda assume if it cant find said image or object or block anymore itll trigger loadimage which updates our list to display images
-                    //wait hold on this whole freaking deleted image thing is encompasing the nav too like i mention on top why is it's typep string and what info or string is it storing
-                    //understood now
+                    //if the returned value is not null, reload
+                    //if null nth happen in ba sing se
                     if (deletedImageId != null) {
                       await _loadImages();
                     }
                   },
 
                   //the image block
-                  child: Hero(
-                    tag: image.id,
+                  child: Container(
+                    // tag: image.id,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(

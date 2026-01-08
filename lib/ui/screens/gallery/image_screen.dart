@@ -55,12 +55,12 @@ class _ImageScreenState extends State<ImageScreen> {
       );
     });
   }
-  // nvm understand now, but still dont quite understand why compare to false is needed cuz to be able to swipe compare must be false, no?
+  // keep session updated between page swipes, no filter cuz we want it to persist btwn swipes
 
   void _showSnackBar(String message) {
-    if (!mounted) return; //what is mounted first ive head of it 
+    if (!mounted) return; //mounted to make sure said widget is still active onscreen, just incase future crash and stuff
 
-    ScaffoldMessenger.of(context) // i assume all standard snackbar things here
+    ScaffoldMessenger.of(context) // snackbar stuff
       ..clearSnackBars()
       ..showSnackBar(
         SnackBar(
@@ -99,7 +99,7 @@ class _ImageScreenState extends State<ImageScreen> {
   } //simple dialog box with 2 options one close the dialoge the other execute the actual delete
 
   Future<void> _saveImage(StoredImage image) async {
-    final permission = await PhotoManager.requestPermissionExtend(); //iddk
+    final permission = await PhotoManager.requestPermissionExtend(); //perms from ios to access photos to save later
     if (!permission.isAuth) {
       _showSnackBar('Photo permission denied');
       return;
@@ -115,7 +115,7 @@ class _ImageScreenState extends State<ImageScreen> {
     } catch (_) {
       _showSnackBar('Failed to save image');
     }
-  } // need help explaining many new terms
+  }
 
   Future<void> _deleteImageConfirmed() async {
     final imageToDelete = widget.images[session.index];
@@ -131,7 +131,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
     _showSnackBar('Image deleted');
     Navigator.pop(context, imageToDelete.id);
-  } // delete simple to understand but still need more context or help understanding the mount stuff 
+  } // delete, pops back to gallery ... then what?
 
   @override
   Widget build(BuildContext context) {
